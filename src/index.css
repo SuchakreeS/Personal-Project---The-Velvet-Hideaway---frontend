@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default
+}
+@plugin "daisyui/theme" {
+  name:"velvet";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  /* Colors */
+  --color-background: #121212; /*Black*/
+  --color-primary: #1B261E; /*Moss green*/
+  --color-secondary: #242424; /*Dark Grey*/
+  --color-neutral: #FDFDFD; /*White*/
+  --color-accent: #EE9300; /*Amber*/
+  --info: #38bdf8;
+  --success: #22c55e;
+  --warning: #fbbf24;
+  --error: #ef4444;
+
+}
