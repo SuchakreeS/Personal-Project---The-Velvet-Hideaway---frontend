@@ -1,7 +1,9 @@
+import AppRouter from "./routes/AppRouter"
+
 function App() {
   return(
     <>
-    <p className="text-8xl">App</p>
+    <AppRouter />
     </>
   )
 }
