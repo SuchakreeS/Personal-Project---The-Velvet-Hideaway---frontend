@@ -2,14 +2,42 @@ import useRecipeStore from "@/stores/recipeStore"
 import { useEffect, useState } from "react"
 
 function UserPage() {
-    const { recipes, categories, loading, getCategories, getRecipes } = useRecipeStore()
-    const [selectedCat, setSelectedCat] = useState("ALL")
+    const { recipes, loading, baseSpirits, getBaseSpirits, getRecipes, createRecipe, categories, getCategories } = useRecipeStore()
+    // เลือกตาม BaseSpirits
+    const [selectedBase, setSelectedBase] = useState("ALL")
+
+
+    // Add new Recipe
+    const [newRecipe, setNewRecipe] = useState({
+        name: '',
+        ingerdients: '',
+        instructions: '',
+        image: '',
+        categoryId: '',
+        baseSpiritId: ''
+    })
+
+    // Modal set
+    // const [isModalOpen, setIsModalOpen] = useState(false)
+
+    // New recipe Handle submit
+    const hdlSubmit = async (evt) => {
+        evt.preventDefault()
+        const createSuccess = await useRecipeStore.getState().createRecipe(newRecipe)
+        if (createSuccess) {
+            setIsModalOpen(false)
+            setNewRecipe({ name: '', ingerdients: '', instructions: '', image: '', categoryId: '', baseSpiritId: '' })
+        }
+    }
+
+
 
     useEffect(() => {
-        getCategories()
+        getBaseSpirits()
         getRecipes()
+        getCategories()
     }, []);
-    const filteredRecipes = selectedCat === "ALL" ? recipes : recipes.filter(recipes => recipes.category?.name === selectedCat)
+    const filteredRecipes = selectedBase === "ALL" ? recipes : recipes.filter(recipes => recipes.basespirit?.name === selectedBase)
 
     if (loading && recipes.length === 0)
         return <div>Loading...</div>
@@ -20,68 +48,107 @@ function UserPage() {
                 <div className="flex flex-col md:flex-row justify-between items-center mb-20 gap-10 border-b border-white/5 pb-10">
                     <div className="flex gap-8 font-syne text-[10px] tracking-widest">
                         <button
-                            className={`text-xl font-fraunces font-semibold ${selectedCat === "ALL" ? "text-accent" : "text-neutral"}`}
-                            onClick={() => setSelectedCat("ALL")}
+                            className={`text-xl font-fraunces font-semibold ${selectedBase === "ALL" ? "text-accent" : "text-neutral"}`}
+                            onClick={() => setSelectedBase("ALL")}
                         >
                             ALL
                         </button>
-
-                        {/* 2. Safety-Guarded Map */}
-                        {categories && categories.map((cat) => (
+                        {baseSpirits && baseSpirits.map((base) => (
                             <button
-                                key={cat.id}
-                                onClick={() => setSelectedCat(cat.name)}
-                                className={`text-xl font-fraunces font-semibold ${selectedCat === cat.name ? "text-accent" : "text-neutral"}`}
+                                key={base.id}
+                                onClick={() => setSelectedBase(base.name)}
+                                className={`text-xl font-fraunces font-semibold ${selectedBase === base.name ? "text-accent" : "text-neutral"}`}
                             >
-                                {cat.name.toUpperCase()}
+                                {base.name.toUpperCase()}
                             </button>
                         ))}
 
                     </div>
-                    <button className="bg-white text-black font-syne text-[10px] font-black tracking-[0.3em] px-10 py-4 hover:bg-accent transition-colors duration-300 whitespace-nowrap">
+                    <button className="bg-white text-black font-syne text-[10px] font-black tracking-[0.3em] px-10 py-4 hover:bg-accent transition-colors duration-300 whitespace-nowrap btn"
+                        onClick={() => document.getElementById('createRecipe').showModal()}>
                         + NEW CRAFT
                     </button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                    <div className="group relative flex flex-col bg-secondary/40 backdrop-blur-md border border-white/5 hover:border-accent/40 transition-all duration-500 rounded-sm">
-                        <div className="relative h-64 w-full overflow-hidden">
-                            <div className="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-all duration-500 z-10"></div>
-                            <img
-                                src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=800"
-                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
-                            />
-                            <div className="absolute top-4 left-4 z-20">
-                                <span className="bg-accent text-black text-[10px] font-bold px-3 py-1 uppercase tracking-widest">
-                                    Gin Base
-                                </span>
+                    {filteredRecipes && filteredRecipes.map((recipe) =>
+                        <div>
+                            <div>
+                                <img src={recipe.image} alt="" />
                             </div>
-                        </div>
-                        <div className="p-8 flex flex-col">
-                            <div className="flex justify-between items-start mb-4">
-                                <h3 className="text-4xl font-fraunces font-black text-white italic leading-none">
-                                    The Velvet Sinner
-                                </h3>
-                            </div>
-
-                            <p className="text-neutral/40 font-syne text-[10px] uppercase tracking-[0.2em] mb-6">
-                                Category: Modern Classic
+                            <h3 className="text-xl text-accent font-fraunces">
+                                {recipe.name}
+                            </h3>
+                            <p className="text-lg text-neutral">
+                                {recipe.basespirit?.name || "uncategorized"}
                             </p>
-
-                            <p className="text-white/60 font-syne text-sm line-clamp-2 mb-8 leading-relaxed">
-                                A smooth blend of botanical gin, elderflower liqueur, and a hint of fresh muddled cucumber.
-                            </p>
-                            <div className="mt-auto pt-6 border-t border-white/5 flex justify-between items-center">
-                                <button className="text-white/40 hover:text-accent font-syne text-[10px] uppercase tracking-widest transition-colors font-bold">
-                                    Edit Recipe
-                                </button>
-                                <button className="text-white/20 hover:text-error font-syne text-[10px] uppercase tracking-widest transition-colors">
-                                    Pour Out
-                                </button>
-                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
+
+            {/* Create RecipeModal */}
+            <dialog id="createRecipe" className="modal backdrop-blur-xl">
+                <div className="modal-box bg-[#121212] border border-white/10 rounded-none max-w-2xl p-0 overflow-hidden">
+                    <div className="h-2 w-full bg-accent"></div>
+
+                    <div className="p-10">
+                        <div className="flex justify-between items-center mb-10">
+                            <h3 className="font-fraunces italic text-4xl text-accent">Mix a New Craft</h3>
+                            <form method="dialog">
+                                <button className="text-white/20 hover:text-white transition-colors uppercase text-[10px] tracking-widest font-syne">
+                                    Close [x]
+                                </button>
+                            </form>
+                        </div>
+
+                        <form className="flex flex-col gap-6">
+                            <div className="flex flex-wrap gap-4">
+                                <div className="form-control flex-1 min-w-[260px]">
+                                    <label className="label py-1"><span className="label-text text-[9px] text-white/30 font-syne tracking-widest uppercase">Drink Name</span></label>
+                                    <input type="text" className="input input-bordered bg-white/5 border-white/10 rounded-none text-white focus:border-accent font-syne text-xs h-12" />
+                                </div>
+                                <div className="form-control flex-1 min-w-[260px]">
+                                    <label className="label py-1"><span className="label-text text-[9px] text-white/30 font-syne tracking-widest uppercase">Image URL</span></label>
+                                    <input type="file" className="file-input file-input-ghost input-bordered bg-white/5 border-white/10 rounded-none text-white focus:border-accent font-syne text-xs h-12" />
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap gap-4">
+                                <div className="form-control flex-1 min-w-[200px]">
+                                    <label className="label py-1"><span className="label-text text-[9px] text-white/30 font-syne tracking-widest uppercase">Base Spirit</span></label>
+                                    <select className="select select-bordered bg-[#1a1a1a] border-white/10 rounded-none text-white focus:border-accent text-xs h-12">
+                                        <option disabled selected>Select Spirit</option>
+                                        {baseSpirits.map(base=> (
+                                            <option>{base.name.toUpperCase()}</option>
+                                        )) }
+                                    </select>
+                                </div>
+                                <div className="form-control flex-1 min-w-[200px]">
+                                    <label className="label py-1"><span className="label-text text-[9px] text-white/30 font-syne tracking-widest uppercase">Category</span></label>
+                                    <select className="select select-bordered bg-[#1a1a1a] border-white/10 rounded-none text-white focus:border-accent text-xs h-12">
+                                        <option disabled selected>Select Category</option>
+                                        {categories.map(base=> (
+                                            <option>{base.name.toUpperCase()}</option>
+                                        )) }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-control w-full">
+                                <label className="label py-1"><span className="label-text text-[9px] text-white/30 font-syne tracking-widest uppercase">Ingredients</span></label>
+                                <textarea className="textarea textarea-bordered bg-white/5 border-white/10 rounded-none text-white focus:border-accent font-syne text-xs h-28 resize-none" />
+                            </div>
+                            <div className="form-control w-full">
+                                <label className="label py-1"><span className="label-text text-[9px] text-white/30 font-syne tracking-widest uppercase">Istructions</span></label>
+                                <textarea className="textarea textarea-bordered bg-white/5 border-white/10 rounded-none text-white focus:border-accent font-syne text-xs h-28 resize-none" />
+                            </div>
+
+                            <button className="btn btn-block bg-white text-black hover:bg-accent border-none rounded-none font-syne font-black tracking-[0.3em] h-16 mt-4">
+                                CONFIRM CRAFT
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+
         </>
     )
 }
