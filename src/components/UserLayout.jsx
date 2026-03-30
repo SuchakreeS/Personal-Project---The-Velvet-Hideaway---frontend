@@ -1,17 +1,24 @@
+import useUserStore from "@/stores/userStore"
 import { Link, Outlet, useNavigate } from "react-router"
 
 
 function UserLayout() {
     const navigate = useNavigate()
+    const {logout} = useUserStore()
+
+    const hdlLogout = ()=> {
+        logout()
+        navigate('/')
+    }
     return (
         <>
             <div className="min-h-screen bg-[url(./assets/Bar-bg.png)] bg-cover flex flex-col">
                 <div className="w-full bg-secondary flex items-center justify-between">
-                    <div className="ml-5 flex flex-col cursor-pointer" onClick={() => navigate('/')}>
+                    <div className="ml-5 flex flex-col cursor-pointer" onClick={() => navigate('/barfront')}>
                         <h1 className="text-3xl font-fraunces font-black text-neutral">THE VELVET</h1>
                         <h1 className="text-3xl font-fraunces font-black text-accent">HIDEAWAY</h1>
                     </div>
-                    <Link to={('/')}
+                    <Link to={('/barfront')}
                         className="text-3xl font-fraunces font-black text-neutral">Home</Link>
                     <Link
                         className="text-3xl font-fraunces font-black text-neutral">Base Spirits</Link>
@@ -29,13 +36,13 @@ function UserLayout() {
                                     <a className="text-xl" onClick={() => navigate('/user')}>Profile</a>
                                 </li>
                                 <li>
-                                    <a className="text-xl ">Your Recipes</a>
+                                    <a className="text-xl " onClick={() => navigate('/recipes/user-recipes')}>Your Recipes</a>
                                 </li>
                                 <li>
-                                    <a className="text-xl ">Explore the Recipes</a>
+                                    <a className="text-xl " onClick={() => navigate('/recipes')}>Explore the Recipes</a>
                                 </li>
                                 <li>
-                                    <a className="text-xl ">Logout</a>
+                                    <a className="text-xl " onClick={hdlLogout}>Logout</a>
                                 </li>
                             </ul>
                         </details>

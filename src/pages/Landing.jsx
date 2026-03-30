@@ -1,36 +1,65 @@
-import { useNavigate } from "react-router";
+import React from 'react';
+import { useNavigate } from 'react-router';
 
-function Landing() {
+function Landing({ onGuest }) {
     const navigate = useNavigate();
 
+    const handleEnter = () => {
+        navigate('/auth/login');
+    };
+
+    const handleGuest = () => {
+        if (onGuest) onGuest();
+        navigate('/barfront');
+    };
+
     return (
-        <>
-            <div className="w-full min-h-screen bg-[url(./assets/Bar-bg.png)] bg-cover flex justify-center">
-                <div className="bg-secondary/80 min-h-screen w-[80%] flex flex-col items-center justify-center text-center px-4">
-                    <div className="max-w-4xl text-white">
-                        <h1 className="text-8xl font-black uppercase tracking-tight font-fraunces">
-                            THE VELVET
-                        </h1>
-                        <h1 className="text-8xl font-black text-[#EE9300] tracking-tight leading-none mb-10 font-fraunces">
-                            HIDEAWAY
-                        </h1>
-                        <h2 className="text-4xl font-bold mb-10 font-fraunces">
-                            Your private sanctuary for the liquid crafts
-                        </h2>
-                        <p className="text-2xl font-semibold mb-12 opacity-90">
-                            The Velvet Hideaway is a digital sanctuary for the home mixologist who appreciates a stiff drink and a soft chair. Curate your personal collection in a space designed for slow sips and quiet evenings.
-                        </p>
-                        <button
-                            className="btn btn-primary text-black bg-[#EE9300] hover:bg-[#EE9300]/90 border-none rounded-full px-12 py-3 h-auto text-2xl font-semibold transform hover:scale-105 transition-all duration-200"
-                            onClick={() => navigate('/auth/login')} // Correct way to handle click navigation
-                        >
-                            Enter your hideaway
-                        </button>
-                    </div>
+        <div className="h-screen w-full bg-[url(./assets/Bar-bg.png)] bg-cover flex flex-col items-center justify-center text-white p-6 relative overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/5 blur-[120px] rounded-full pointer-events-none"></div>
+
+            <div className="w-[1px] h-24 bg-gradient-to-b from-transparent via-white/20 to-transparent mb-12 opacity-50"></div>
+
+            <div className="text-center z-10 max-w-4xl">
+                <h1 className="font-fraunces italic text-7xl md:text-9xl mb-8 tracking-tighter leading-tight">
+                    The Velvet <br /> 
+                    <span className="text-accent">Hideaway</span>
+                </h1>
+                <p className="font-syne text-[10px] md:text-[12px] tracking-[0.7em] uppercase text-white/30 mb-20">
+                    A Private Archive for the Modern Mixologist
+                </p>
+
+                <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
+                    <button 
+                        onClick={handleEnter}
+                        className="group relative px-16 py-6 bg-white text-black font-syne font-black tracking-[0.4em] text-[11px] overflow-hidden transition-all duration-500"
+                    >
+                        <span className="relative z-10 group-hover:text-white transition-colors duration-500">
+                            ENTER ARCHIVE
+                        </span>
+                        <div className="absolute inset-0 bg-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
+                    </button>
+                    <button 
+                        onClick={handleGuest}
+                        className="px-12 py-6 border border-white/5 font-syne font-bold tracking-[0.4em] text-[10px] text-white/30 hover:text-white hover:border-white/40 hover:bg-white/5 transition-all duration-700 uppercase"
+                    >
+                        Continue as Guest
+                    </button>
                 </div>
             </div>
-        </>
-    )
+
+            {/* Bottom Decorative Footer */}
+            <div className="absolute bottom-12 flex flex-col items-center gap-4">
+                <div className="w-12 h-[1px] bg-white/10"></div>
+                <div className="font-syne text-[8px] tracking-[1.2em] text-white/10 uppercase pl-[1.2em]">
+                    Pathum Thani — Est. 2026
+                </div>
+            </div>
+
+            {/* Corner Accents */}
+            <div className="absolute top-10 left-10 border-t border-l border-white/5 w-10 h-10"></div>
+            <div className="absolute bottom-10 right-10 border-b border-r border-white/5 w-10 h-10"></div>
+        </div>
+    );
 }
 
 export default Landing;

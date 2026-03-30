@@ -20,7 +20,7 @@ function Login() {
         try {
             await login(body);
             toast.success('Welcome back to the Hideaway');
-            navigate('/user');
+            navigate('/barfront');
         } catch (err) {
             const errMsg = err.response?.data?.message || err.message;
             toast.error(errMsg);

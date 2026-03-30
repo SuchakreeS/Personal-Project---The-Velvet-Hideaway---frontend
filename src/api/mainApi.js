@@ -19,3 +19,15 @@ mainApi.interceptors.request.use(config => {
 export const apiRegister = async (body) => {
     return await mainApi.post('/auth/register', body)
 }
+
+export const apiRecipeDelete = async(id) => {
+    return await mainApi.delete(`/recipes/${id}`)
+}
+
+export const apiEditRecipe = async(id, body) => {
+    return await mainApi.put(`/recipes/${id}`)
+}
+
+export const apiUpdateProfile = async (body) => {
+    return await mainApi.patch('/user/edit', body)
+}
