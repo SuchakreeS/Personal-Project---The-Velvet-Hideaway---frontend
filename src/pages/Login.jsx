@@ -42,7 +42,7 @@ function Login() {
                                 className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none px-4"
                                 placeholder="velvet@hideaway.com"
                             />
-                            {errors.email && <p className="text-sm text-error">{errors.username.message}</p>}
+                            {errors.email && <p className="text-sm text-error">{errors.email?.message}</p>}
                         </div>
 
                         <div className="flex flex-col gap-2">
@@ -53,7 +53,7 @@ function Login() {
                                 className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none border-4 border-[#3282B8]/50 px-4"
                                 placeholder="••••••••"
                             />
-                            {errors.password && <p className="text-sm text-error">{errors.password.message}</p>}
+                            {errors.password?.message && <p className="text-sm text-error">{errors.password?.message}</p>}
                         </div>
 
                         <button

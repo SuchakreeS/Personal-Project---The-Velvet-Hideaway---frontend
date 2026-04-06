@@ -35,7 +35,7 @@ function FullRecipeModal({
                             <section>
                                 <h4 className="text-white/30 font-syne text-[9px] tracking-widest uppercase mb-3">The Composition</h4>
                                 <div className="text-neutral font-syne text-sm leading-relaxed whitespace-pre-wrap border-l border-accent/20 pl-4">
-                                    {recipe.ingredients}
+                                    <p>{recipe.ingredients}</p>
                                 </div>
                             </section>
                             <section>

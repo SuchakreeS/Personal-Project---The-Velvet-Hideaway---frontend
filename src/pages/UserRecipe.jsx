@@ -3,15 +3,18 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import FullRecipeModal from "@/components/FullRecipeModal"
 import RecipeFormModal from "@/components/RecipeFormModal"
+import useUserStore from "@/stores/userStore"
 
 function UserRecipe() {
-    const { recipes, loading, baseSpirits, getBaseSpirits, getRecipes, createRecipe, categories, getCategories, deleteRecipe, editRecipe } = useRecipeStore()
+    const { userRecipes, loading, baseSpirits, getBaseSpirits, getUserRecipes, createRecipe, categories, getCategories, deleteRecipe, editRecipe } = useRecipeStore()
     // เลือกตาม BaseSpirits
     const [selectedBase, setSelectedBase] = useState("ALL")
 
     const [editId, setEditId] = useState(null)
 
     const [viewRecipe, setViewRecipe] = useState(null)
+
+    const [fileName, setFileName] = useState("")
 
 
     // Add new Recipe
@@ -37,21 +40,20 @@ function UserRecipe() {
 
     const hdlSubmit = async (evt) => {
         evt.preventDefault();
-
         try {
             let res;
             if (editId) {
                 res = await editRecipe(editId, newRecipe);
                 toast.success("Craft Updated Successfully");
                 document.getElementById('createRecipe').close();
-                await getRecipes()
+                await getUserRecipes()
                 resetForm();
             } else {
                 res = await createRecipe(newRecipe);
                 toast.success("New Craft Added");
             }
             if (res) {
-                await getRecipes();
+                await getUserRecipes();
                 document.getElementById('createRecipe').close();
                 resetForm();
             }
@@ -88,13 +90,16 @@ function UserRecipe() {
     }
 
     const hdlDelete = async (id) => {
-        const confirmDelete = window.confirm("Confirm to delete this recipe?")
-        if (confirmDelete) {
-            const deleted = await deleteRecipe(id)
-            if (deleted) {
-                await getRecipes()
-                toast.success("Recipe Deleted")
-            }
+        if(!window.confirm("Confirm Delete")){
+            return
+        }
+
+        try{
+            await deleteRecipe(id)
+            await getUserRecipes()
+            toast.success("The Recipe has been deleted")
+        } catch(err) {
+            console.log(err)
         }
     }
 
@@ -103,17 +108,37 @@ function UserRecipe() {
         document.getElementById('FullRecipeModal').showModal()
     }
 
+const hdlFileChange = (e) => {
+    const file = e.target.files[0];
+    
+    if (file) {
+        if (file.size > 10 * 1024 * 1024) {
+            alert("File is too large! Please choose an image under 10MB.");
+            return;
+        }
+
+        setFileName(file.name); // Save the name to show the user
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setNewRecipe((prev) => ({ ...prev, image: reader.result }));
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
 
 
     useEffect(() => {
         getBaseSpirits()
-        getRecipes()
+        getUserRecipes()
         getCategories()
     }, []);
-    const filteredRecipes = selectedBase === "ALL" ? recipes : recipes.filter(recipes => recipes.basespirit?.name === selectedBase)
-
-    if (loading && recipes.length === 0)
-        return <div>Loading...</div>
+    const {user} = useUserStore()
+    const filteredRecipes = (userRecipes || []).filter(recipe => {
+    const matchesBase = selectedBase === "ALL" || recipe.basespirit?.name === selectedBase;
+    return matchesBase;
+});
 
     return (
         <>
@@ -177,6 +202,9 @@ function UserRecipe() {
                                 <p className="text-sm text-neutral font-syne tracking-widest uppercase mt-1">
                                     {recipe.basespirit?.name || "Uncategorized"}
                                 </p>
+                                <p className="text-sm text-neutral font-syne tracking-widest uppercase mt-1">
+                                    {recipe.category.name || "Uncategorized"}
+                                </p>
                             </div>
                         </div>
                     ))}
@@ -189,6 +217,7 @@ function UserRecipe() {
                 newRecipe={newRecipe}
                 hdlChange={hdlChange}
                 hdlSubmit={hdlSubmit}
+                hdlFileChange={hdlFileChange}
                 baseSpirits={baseSpirits}
                 categories={categories}
                 id="createRecipe"

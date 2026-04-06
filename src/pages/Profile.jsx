@@ -82,7 +82,7 @@ const Profile = () => {
                     <div className="flex flex-col gap-1">
                         <label className="text-[10px] text-accent tracking-[0.3em] uppercase font-bold">Biography</label>
                         <p className="text-lg text-white/70 leading-relaxed italic font-fraunces">
-                            {user.bio || "No biography provided in the archives yet."}
+                            {user.info || "No biography provided in the archives yet."}
                         </p>
                     </div>
                 </div>

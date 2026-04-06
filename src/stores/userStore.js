@@ -5,11 +5,17 @@ import { mainApi } from '@/api/mainApi'
 const useUserStore = create( persist((set,get)=>({
     user: null,
     token: "",
-    login: async(body) => {
-        const rs = await mainApi.post('/auth/login', body)
-        set({token: rs.data.token, user: rs.data.user})
-        return rs
-    },
+    login: async (body) => {
+    const rs = await mainApi.post('/auth/login', body)
+    const { token, user } = rs.data
+    
+    if (token && user) {
+        set({ token: token, user: user })
+    }
+    console.log(token)
+    console.log(user)
+    return rs
+},
     getMe: async () => {
         const token = get().token
         if(!token){

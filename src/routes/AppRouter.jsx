@@ -1,5 +1,4 @@
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router'
-import { useState } from 'react'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router'
 import Landing from '@/pages/Landing'
 import Register from '@/pages/Register'
 import Login from '@/pages/Login'
@@ -8,50 +7,47 @@ import UserLayout from '@/components/UserLayout'
 import Profile from '@/pages/Profile'
 import UserRecipe from '@/pages/UserRecipe'
 import MusicPlayer from '@/pages/MusicPlayer'
+import BaseSpirit from '@/pages/BaseSpirit'
+import About from '@/pages/About'
+import Category from '@/pages/Category'
+import { ProtectRoute } from '@/components/ProtectRoute'
 
 export default function AppRouter() {
-    const [isGuest, setIsGuest] = useState(false)
-
-    // Replace with your actual Auth Store logic (e.g., const { user } = useAuthStore())
-    const user = null
-
     const router = createBrowserRouter([
-        {
-            path: "/",
-            element: <Landing onGuest={() => setIsGuest(true)} />
-        },
-        {
-            path: "/auth/login",
-            element: <Login />
-        },
-        {
-            path: "/auth/register",
-            element: <Register />
-        },
+        { path: "/", element: <Landing /> },
+        { path: "/auth/login", element: <Login /> },
+        { path: "/auth/register", element: <Register /> },
         {
             path: '/',
             element: <UserLayout />,
             children: [
-                {
-                    path: '/recipes',
-                    element: <Explore />
+                { path: '/recipes', element: <Explore /> },
+                { path: '/barfront', element: <MusicPlayer /> },
+                { path: '/spirits', element: <BaseSpirit /> },
+                {path: '/about', element:<About />},
+                
+                // PROTECTED: Any logged-in user
+                { 
+                    path: '/user', 
+                    element: <ProtectRoute><Profile /></ProtectRoute> 
                 },
-                {
-                    path: '/recipes/user-recipes',
-                    element: <UserRecipe />
+                { 
+                    path: '/recipes/user-recipes', 
+                    element: <ProtectRoute><UserRecipe /></ProtectRoute> 
                 },
-                {
-                    path: '/user',
-                    element: <Profile />
-                },
-                {
-                    path: '/barfront',
-                    element: <MusicPlayer />
+
+                // PROTECTED: Admin Only
+                { 
+                    path: '/categories', 
+                    element: (
+                        <ProtectRoute allowRoles={['ADMIN']}>
+                            <Category />
+                        </ProtectRoute>
+                    ) 
                 }
             ]
         }
-
     ]);
 
-    return <RouterProvider router={router} />
+    return <RouterProvider router={router} />;
 }

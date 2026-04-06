@@ -6,6 +6,7 @@ function RecipeFormModal({
     newRecipe, 
     hdlChange, 
     hdlSubmit, 
+    hdlFileChange,
     baseSpirits, 
     categories 
 }) {
@@ -47,11 +48,11 @@ function RecipeFormModal({
                                     <span className="label-text text-[9px] text-white/30 font-syne tracking-widest uppercase">Image URL</span>
                                 </label>
                                 <input 
-                                    type="text" 
+                                    type="file" 
+                                    accept='image/*'
                                     className="input input-bordered bg-white/5 border-white/10 rounded-none text-white focus:border-accent font-syne text-xs h-12" 
                                     name="image" 
-                                    onChange={hdlChange} 
-                                    value={newRecipe.image}
+                                    onChange={hdlFileChange} 
                                 />
                             </div>
                         </div>

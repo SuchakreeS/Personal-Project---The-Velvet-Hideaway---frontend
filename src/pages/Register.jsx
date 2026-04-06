@@ -2,30 +2,30 @@ import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { registerSchema } from "@/validtions/schema";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import { mainApi } from "@/api/mainApi";
 
 function Register() {
-    const {formState, register, handleSubmit, reset} = useForm({
+    const { formState, register, handleSubmit } = useForm({
         resolver: zodResolver(registerSchema),
         mode: 'onSubmit',
-        defaultValues: {email: '', username: '', password: '', confirmPassword: ''}
+        defaultValues: { email: '', username: '', password: '', confirmPassword: '' }
     })
 
-    const {errors} = formState
+    const { errors } = formState
 
     const navigate = useNavigate()
 
     const onSubmit = async data => {
-       try {
-        const resp = await axios.post('http://localhost:8875/auth/register', data)
-        toast.success(resp.data.message)
-        navigate('/auth/login')
-       } catch(err) {
-        const errMsg = err.response?.data?.error || err.message
-        toast.error(errMsg)
-       }
+        try {
+            const resp = await mainApi.post('/auth/register', data)
+            toast.success(resp.data.message)
+            navigate('/auth/login')
+        } catch (err) {
+            const errMsg = err.response?.data?.error || err.message
+            toast.error(errMsg)
+        }
     }
 
     return (
@@ -42,13 +42,13 @@ function Register() {
                                     Username:
                                 </label>
                                 <div className="w-full">
-                                <input
-                                    type="text"
-                                    {...register('username')}
-                                    className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none"
-                                    placeholder="Username"
-                                />
-                                <p className="text-sm text-error">{errors.username ?.message}</p>
+                                    <input
+                                        type="text"
+                                        {...register('username')}
+                                        className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none"
+                                        placeholder="Username"
+                                    />
+                                    <p className="text-sm text-error">{errors.username?.message}</p>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
@@ -56,13 +56,13 @@ function Register() {
                                     E-mail:
                                 </label>
                                 <div className="w-full">
-                                <input
-                                    type="text"
-                                    {...register('email')}
-                                    className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none"
-                                    placeholder="Email"
-                                />
-                                <p className="text-sm text-error">{errors.email?.message}</p>
+                                    <input
+                                        type="text"
+                                        {...register('email')}
+                                        className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none"
+                                        placeholder="Email"
+                                    />
+                                    <p className="text-sm text-error">{errors.email?.message}</p>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
@@ -70,13 +70,13 @@ function Register() {
                                     Password:
                                 </label>
                                 <div className="w-full">
-                                <input
-                                    type="password"
-                                    {...register('password')}
-                                    className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none border-4 border-[#3282B8]/50"
-                                    placeholder="••••••••"
-                                />
-                                <p className="text-sm text-error">{errors.password?.message}</p>
+                                    <input
+                                        type="password"
+                                        {...register('password')}
+                                        className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none border-4 border-[#3282B8]/50"
+                                        placeholder="••••••••"
+                                    />
+                                    <p className="text-sm text-error">{errors.password?.message}</p>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-2">
@@ -84,13 +84,13 @@ function Register() {
                                     Confirm Password:
                                 </label>
                                 <div className="w-ful">
-                                <input
-                                    type="password"
-                                    {...register('confirmPassword')}
-                                    className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none border-4 border-[#3282B8]/50"
-                                    placeholder="••••••••"
-                                />
-                                <p className="text-sm text-error">{errors.confirmPassword?.message}</p>
+                                    <input
+                                        type="password"
+                                        {...register('confirmPassword')}
+                                        className="input w-full bg-neutral text-secondary h-14 rounded-2xl text-lg focus:outline-none border-4 border-[#3282B8]/50"
+                                        placeholder="••••••••"
+                                    />
+                                    <p className="text-sm text-error">{errors.confirmPassword?.message}</p>
                                 </div>
                             </div>
                             <button

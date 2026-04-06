@@ -24,6 +24,7 @@ function Landing({ onGuest }) {
                     The Velvet <br /> 
                     <span className="text-accent">Hideaway</span>
                 </h1>
+                <img src="" alt="" />
                 <p className="font-syne text-[10px] md:text-[12px] tracking-[0.7em] uppercase text-white/30 mb-20">
                     A Private Archive for the Modern Mixologist
                 </p>

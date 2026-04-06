@@ -18,7 +18,6 @@ function Explore() {
         getCategories()
     }, []);
 
-    // Fixed filter logic
     const filteredRecipes = selectedBase === "ALL"
         ? recipes
         : recipes.filter(recipe => recipe.basespirit?.name === selectedBase)
@@ -76,7 +75,7 @@ function Explore() {
                                 <div className="p-6">
                                     <h3 className="text-xl text-accent font-fraunces italic">{recipe.name}</h3>
                                     <p className="text-sm text-neutral font-fraunces tracking-widest uppercase mt-1">
-                                        {recipe.basespirit?.name || "Uncategorized"}
+                                        {recipe.basespirit?.name || "Uncategorized"}, {recipe.category?.name || "Uncategorized"}
                                     </p>
                                     <p className="text-xs text-neutral tracking-widest uppercase mt-1">
                                         {recipe.user?.username || "Uncategorized"}

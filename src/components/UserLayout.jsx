@@ -18,11 +18,11 @@ function UserLayout() {
                         <h1 className="text-3xl font-fraunces font-black text-neutral">THE VELVET</h1>
                         <h1 className="text-3xl font-fraunces font-black text-accent">HIDEAWAY</h1>
                     </div>
-                    <Link to={('/barfront')}
-                        className="text-3xl font-fraunces font-black text-neutral">Home</Link>
-                    <Link
+                    <Link to={('/recipes')}
+                        className="text-3xl font-fraunces font-black text-neutral">Explore</Link>
+                    <Link to={('/spirits')}
                         className="text-3xl font-fraunces font-black text-neutral">Base Spirits</Link>
-                    <Link
+                    <Link to={('/about')}
                         className="text-3xl font-fraunces font-black text-neutral">About Us</Link>
                     <div className="mr-5">
                         <details class="dropdown dropdown-end">

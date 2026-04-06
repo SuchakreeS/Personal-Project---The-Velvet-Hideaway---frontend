@@ -9,7 +9,8 @@ function App() {
     <AppRouter />
     <ToastContainer
     position="top-center"
-    style={{zIndex:9999}}/>
+    style={{zIndex:9999}}
+    theme="dark"/>
     
     </>
   )
