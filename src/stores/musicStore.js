@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { getMoodTracks } from "@/lib/audius";
 import dustInTheWind from "@/assets/DustInTheWind.mp3"
 import windOfChange from "@/assets/WindOfChange.mp3"
 
@@ -6,12 +7,25 @@ const useMusicStore = create ( (set, get) => ({
     isPlaying: false,
     volume: 0.5,
 
-    playList: [
-        {id:1, title: "Dust In The Wind", artist:"Kansas", url:dustInTheWind},
-        {id:2, title: "Wind Of Change", artist:"Scorpions", url:windOfChange}
-    ],  
-    currentTrack: dustInTheWind,
-    currentTrackTitle: "Dust In The Wind",
+    playList: [],  
+    currentTrack: null,
+    currentTrackTitle: "Choose Your Mood",
+    currentArtist: "",
+    currentCover:"",
+
+    getMood: async(mood) => {
+        const tracks = await getMoodTracks(mood)
+        if(tracks.length > 0) {
+            set({
+                playList: tracks,
+                currentTrack: tracks[0].url,
+                currentTrackTitle: tracks[0].title,
+                currentArtist: tracks[0].artist,
+                currentCover: tracks[0].cover,
+                isPlaying: true
+            })
+        }
+    },
 
     togglePlay: () => set((state)=> ({isPlaying: !state.isPlaying})),
     setVolume: (val) => set({volume : val}),
@@ -19,32 +33,37 @@ const useMusicStore = create ( (set, get) => ({
     selectTrack: (track) => set({
         currentTrack: track.url,
         currentTrackTitle: track.title,
+        currentArtist: track.artist,
+        currentCover: track.cover,
         isPlaying: true
     }),
     nextTrack: () => {
-        const {playList, currentTrack} = get()
-        const currentTrackIndex = playList.findIndex(track => track.url === currentTrack)
-        const nextTrackIndex = (currentTrackIndex + 1) % playList.length
-        const nextTrackData = playList[nextTrackIndex]
-
-        set ({
-            currentTrack: nextTrackData.url,
-            currentTrackTitle: nextTrackData.title,
+        const { playList, currentTrack } = get();
+        if (playList.length === 0) return;
+        const index = playList.findIndex(t => t.url === currentTrack);
+        const next = playList[(index + 1) % playList.length];
+        set({
+            currentTrack: next.url,
+            currentTrackTitle: next.title,
+            currentArtist: next.artist,
+            currentCover: next.cover,
             isPlaying: true
-        })
+        });
     },
+
     prevTrack: () => {
         const { playList, currentTrack } = get();
-        const currentTrackIndex = playList.findIndex(track => track.url === currentTrack);
-        const prevTrackIndex = (currentTrackIndex - 1 + playList.length) % playList.length;
-        const prevTrackData = playList[prevTrackIndex];
-
+        if (playList.length === 0) return;
+        const index = playList.findIndex(t => t.url === currentTrack);
+        const prev = playList[(index - 1 + playList.length) % playList.length];
         set({
-            currentTrack: prevTrackData.url,
-            currentTrackTitle: prevTrackData.title,
+            currentTrack: prev.url,
+            currentTrackTitle: prev.title,
+            currentArtist: prev.artist,
+            currentCover: prev.cover,
             isPlaying: true
         });
     }
-}))
+}));
 
 export default useMusicStore
