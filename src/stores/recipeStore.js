@@ -6,7 +6,7 @@ import useUserStore from "./userStore";
 
 const useRecipeStore = create((set, get) => ({
     recipes: [],
-    userRecipes:[],
+    userRecipes: [],
     categories: [],
     baseSpirits: [],
     loading: false,
@@ -206,18 +206,18 @@ const useRecipeStore = create((set, get) => ({
     },
 
     // Edit recipe
-   editRecipe: async (id, formData) => {
-    try {
-        const res = await mainApi.put(`/recipes/${id}`, formData);
-        // Match the key "recipe" returned by your controller
-        const updatedRecipe = res.data.recipe; 
+    editRecipe: async (id, formData) => {
+        try {
+            const res = await mainApi.put(`/recipes/${id}`, formData);
+            // Match the key "recipe" returned by your controller
+            const updatedRecipe = res.data.recipe;
 
-        set((state) => ({
-            userRecipes: state.userRecipes.map((r) => r.id === id ? updatedRecipe : r),
-            recipes: state.recipes.map((r) => r.id === id ? updatedRecipe : r)
-        }));
-        return true;
-    } catch (err) {
+            set((state) => ({
+                userRecipes: state.userRecipes.map((r) => r.id === id ? updatedRecipe : r),
+                recipes: state.recipes.map((r) => r.id === id ? updatedRecipe : r)
+            }));
+            return true;
+        } catch (err) {
             console.error("Store Error:", err);
             return false;
         } finally {

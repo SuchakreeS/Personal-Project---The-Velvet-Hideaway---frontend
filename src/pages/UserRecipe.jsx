@@ -200,10 +200,10 @@ const hdlFileChange = (e) => {
                                     {recipe.name}
                                 </h3>
                                 <p className="text-sm text-neutral font-syne tracking-widest uppercase mt-1">
-                                    {recipe.basespirit?.name || "Uncategorized"}
+                                    {recipe.basespirit?.name || "No base Spirit"}
                                 </p>
                                 <p className="text-sm text-neutral font-syne tracking-widest uppercase mt-1">
-                                    {recipe.category.name || "Uncategorized"}
+                                    {recipe.category?.name || "Uncategorized"}
                                 </p>
                             </div>
                         </div>

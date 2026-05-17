@@ -1,4 +1,5 @@
 import EditProfileModal from '@/components/EditProfileModal';
+import { AVATARS } from '@/constants/avatars';
 import useRecipeStore from '@/stores/recipeStore';
 import useUserStore from '@/stores/userStore';
 import React, { useEffect } from 'react';
@@ -6,7 +7,8 @@ import { useNavigate } from 'react-router';
 
 const Profile = () => {
     const navigate = useNavigate()
-    const { user, getMe, logout } = useUserStore()
+    // Added profilePicture to destructuring
+    const { user, getMe, logout, profilePicture } = useUserStore()
     const { recipes, getRecipes } = useRecipeStore()
 
     useEffect(() => {
@@ -44,8 +46,16 @@ const Profile = () => {
                 {/* Header */}
                 <div className='flex flex-col items-center gap-8 border-b border-neutral/5 pb-12'>
                     <div className='avatar'>
-                        <div className='w-32 rounded-full ring ring-accent ring-offset-base-100 ring-offset-2 bg-primary flex items-center justify-center'>
-                            {user.username}
+                        {/* UPDATED: Now displays the selected profilePicture */}
+                        <div className='w-32 h-32 rounded-full ring ring-accent ring-offset-base-100 ring-offset-2 bg-primary overflow-hidden'>
+                            <img 
+                                src={profilePicture || AVATARS[0].url} 
+                                alt={user.username} 
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+        e.target.src = 'https://api.dicebear.com/7.x/shapes/svg?seed=Noir&backgroundColor=050505,10b981';
+    }}
+                            />
                         </div>
                     </div>
                     <div className="flex flex-col items-center md:items-start gap-2">
@@ -100,7 +110,6 @@ const Profile = () => {
                 </div>
             </div>
             <EditProfileModal id="EditProfileModal"/>
-
         </div>
     )
 }

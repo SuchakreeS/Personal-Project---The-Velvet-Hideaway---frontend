@@ -8,12 +8,12 @@ import { toast } from "react-toastify";
 function Login() {
     const navigate = useNavigate();
     const login = useUserStore(state => state.login);
-    
+
     const { handleSubmit, register, formState } = useForm({
         resolver: zodResolver(loginSchema),
         mode: 'onSubmit'
     });
-    
+
     const { errors, isSubmitting } = formState;
 
     const onSubmit = async (body) => {
@@ -32,7 +32,7 @@ function Login() {
             <div className="bg-secondary/80 min-h-screen w-[80%] flex flex-col items-center text-center px-4">
                 <div className="max-w-xl w-full text-white bg-black/40 p-12 rounded-lg backdrop-blur-md mt-20">
                     <h1 className="text-7xl font-fraunces mb-12 font-black">Log in</h1>
-                    
+
                     <form className="flex flex-col gap-8 text-left" onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex flex-col gap-2">
                             <label className="text-xl font-semibold">Email:</label>
