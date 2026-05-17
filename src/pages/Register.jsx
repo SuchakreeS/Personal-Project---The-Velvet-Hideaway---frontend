@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { registerSchema } from "@/validtions/schema";
+import { registerSchema } from "@/validations/schema";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import { mainApi } from "@/api/mainApi";

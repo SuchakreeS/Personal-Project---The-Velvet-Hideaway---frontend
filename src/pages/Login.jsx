@@ -2,7 +2,7 @@ import useUserStore from "@/stores/userStore";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/validtions/schema";
+import { loginSchema } from "@/validations/schema";
 import { toast } from "react-toastify";
 
 function Login() {
