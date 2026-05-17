@@ -2,7 +2,7 @@ import axios from 'axios'
 import useUserStore from '@/stores/userStore'
 
 export const mainApi = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || "http://localhost:8875",
+    baseURL: import.meta.env.VITE_API_URL || "https://personal-project-the-velvet-hideaway.onrender.com",
 })
 
 mainApi.interceptors.request.use(config => {
