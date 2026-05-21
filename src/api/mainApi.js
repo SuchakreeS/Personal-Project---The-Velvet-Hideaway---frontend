@@ -1,5 +1,6 @@
 import axios from 'axios'
 import useUserStore from '@/stores/userStore'
+// .
 
 export const mainApi = axios.create({
     baseURL: import.meta.env.VITE_API_URL || "https://personal-project-the-velvet-hideaway.onrender.com",
@@ -46,4 +47,8 @@ export const apiEditRecipe = async (id, body) => {
 
 export const apiUpdateProfile = async (body) => {
     return await mainApi.patch('/user/edit', body)
+}
+
+export const apiChat = async (message) => {
+    return await mainApi.post('/ai/chat', {message})
 }

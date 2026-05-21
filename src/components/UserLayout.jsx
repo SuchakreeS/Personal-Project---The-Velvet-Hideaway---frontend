@@ -2,6 +2,7 @@ import { AVATARS } from "@/constants/avatars";
 import useUserStore from "@/stores/userStore";
 import { useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router";
+import ChatWidget from "./ChatWidget";
 
 function UserLayout() {
     const navigate = useNavigate();
@@ -97,6 +98,7 @@ function UserLayout() {
                 <div className="flex-1 overflow-auto">
                     <Outlet />
                 </div>
+                <ChatWidget />
             </div>
         </>
     );
